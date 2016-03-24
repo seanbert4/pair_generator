@@ -11,55 +11,62 @@ var studentSchema = new Schema({
 	cohort: {
 		type: Number,
 		required: true
-	},
-	pastPartners: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'User'
-	}],
-	dates: [Object];
+	}
 });
+
+
+
+studentSchema.statics.getNumStudents = function getNumStudents(cohort) {
+	var result;
+
+	Student.find({
+		cohort: cohort
+	})
+	.exec()
+	.then(function(students) {
+		result = students.length;
+	})
+	.catch(function(err) {
+		throw err;
+	});
+
+	return result;
+}
 
 var Student = mongoose.model('Student', studentSchema);
 
+var pairSchema = new Schema({
 
+	// An array with two elements,
+	// each element is a Student instance
+	partners: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Student' 
+	}],
 
+	// The date when the two students were paired, or a default date
+	// if they haven't been paired yet
+	date: {
+		type: Date,
+		default: new Date(2016, 01, 01)
+	}
+});
 
+var Pair = mongoose.model('Pair', pairSchema);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = {
+	pair: Pair,
+	student: Student
+};
 
 
 
 
 //Populate the Mongo database with student information
+
+// Student.remove();
+// Pair.remove();
+
 // var studentNames = [
 // 	'Edward Liew',
 // 	'Matthew Starr',
@@ -105,19 +112,33 @@ var Student = mongoose.model('Student', studentSchema);
 // 	})
 // })
 
+// Student.find({ 
+// 		cohort: 1602	
+// })
+// .then(function getPossiblePairs (students) {
+	
+// 	// All of the .save() promises will be pushed here
+// 	var savePromises = [];
 
+// 	// These variables will store temporary data during the forEach below
+// 	var studentB, possiblePair;
 
+// 	students.forEach(function(studentA, idx) {
+// 		for (var j = idx + 1; j < students.length; j++) {
+// 			studentB = students[j];
 
+// 			console.dir([studentA.name, studentB.name]);
+// 			possiblePair = new Pair({
+// 				partners: [studentA, studentB]
+// 			});
+// 			savePromises.push(possiblePair.save());
+// 		}
+// 	})
+// 	return Promise.all(savePromises);
+// })
+// .catch(function(err) {
+// 	console.error('A ' + err.message + ' error occured while generating or saving pairs');
+// 	throw err;
+// });
 
-
-
-
-
-
-
-
-
-
-
-module.exports = Student;
 
