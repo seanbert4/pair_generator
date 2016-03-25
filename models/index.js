@@ -14,25 +14,6 @@ var studentSchema = new Schema({
 	}
 });
 
-
-
-studentSchema.statics.getNumStudents = function getNumStudents(cohort) {
-	var result;
-
-	Student.find({
-		cohort: cohort
-	})
-	.exec()
-	.then(function(students) {
-		result = students.length;
-	})
-	.catch(function(err) {
-		throw err;
-	});
-
-	return result;
-}
-
 var Student = mongoose.model('Student', studentSchema);
 
 var pairSchema = new Schema({
@@ -61,11 +42,11 @@ module.exports = {
 
 
 
+// Populate the Mongo database with student information
 
-//Populate the Mongo database with student information
+// Student.remove({}, console.error.bind(console));
+// Pair.remove({}, console.error.bind(console));
 
-// Student.remove();
-// Pair.remove();
 
 // var studentNames = [
 // 	'Edward Liew',
@@ -113,7 +94,7 @@ module.exports = {
 // })
 
 // Student.find({ 
-// 		cohort: 1602	
+// 	cohort: 1602	
 // })
 // .then(function getPossiblePairs (students) {
 	

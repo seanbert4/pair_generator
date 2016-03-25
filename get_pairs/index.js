@@ -3,19 +3,15 @@ var models = require('../models'),
 	Student = models.student;
 
 function getPairs() {
-	console.log('getPairs was called');
 	//Get all possible pairs
 	Pair.find()
 	.populate('partners')
 	.sort('date')
 	.exec()
-
 	// Pick the pairs
 	.then(function pickPairs(sortedPairs) {
 		var numPairs = 12,
-			count = 0,
 			pickPairsRecursively = function(index, pickedPairs) {
-				count++;
 				if (pickedPairs.length === numPairs) return pickedPairs;
 
 				var possiblePair,
@@ -58,13 +54,12 @@ function getPairs() {
 			
 			studentsString = nextPair.partners.map(function(student) {
 				return student.name;
-			}).join('  ');
+			}).join('<br>');
 
-			return finalString + studentsString + '\n';
+			return finalString + studentsString + '<br><br>';
 		}, "");
 
-		console.log('outputString:');
-		console.log(outputString);
+		module.exports.outputString = outputString;
 
 	}).catch(function(err) {
 		console.error('A ' + err.message + ' occured in logic/index.js');
@@ -72,7 +67,9 @@ function getPairs() {
 	});
 };
 
-module.exports = getPairs;
+module.exports = {
+	run: getPairs
+};
 
 
 

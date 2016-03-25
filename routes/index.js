@@ -5,14 +5,15 @@ var express = require('express'),
 
 
 router.get('/newpairs', function(req, res) {
-	
+
 	var getResults = new Promise(function(resolve, reject) {
-		var outputString = getPairs();
-		while (!outputString) {
-			// Do nothing!
-		}
+		getPairs.run();
 		try {
-			resolve(outputString);	
+			setTimeout(function() {
+				var outputString = getPairs.outputString;
+				resolve(outputString);
+
+			}, 200);
 		} catch(err) {
 			reject(err);
 		}
